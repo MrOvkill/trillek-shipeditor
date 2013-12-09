@@ -11,22 +11,22 @@ public class OSDetect
 {
 	public static boolean isWindows()
 	{
-		boolean windows = (System.getProperty("os.name").toLowerCase().indexOf("win") > 0);
+		boolean windows = (System.getProperty("os.name").toLowerCase().contains("win"));
 		return windows;
 	}
 	public static boolean isMac()
 	{
-		boolean mac = (System.getProperty("os.name").toLowerCase().indexOf("mac") > 0);
+		boolean mac = (System.getProperty("os.name").toLowerCase().contains("mac"));
 		return mac;
 	}
 	public static boolean isLinux()
 	{
-		boolean linux = (System.getProperty("os.name").toLowerCase().indexOf("linux") > 0);
+		boolean linux = (System.getProperty("os.name").toLowerCase().contains("nux"));
 		return linux;
 	}
 	public static boolean isUnix()
 	{
-		boolean unix = (System.getProperty("os.name").toLowerCase().indexOf("nix") > 0);
+		boolean unix = (System.getProperty("os.name").toLowerCase().contains("nix"));
 		return unix;
 	}
 	public static String getName()

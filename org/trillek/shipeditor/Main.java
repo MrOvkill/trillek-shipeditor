@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.input.*;
 
 import overkill.idonedid.conflib.ConfigParser;
@@ -31,14 +32,62 @@ import com.google.gson.GsonBuilder;
 
 public class Main
 {
-	FPSCamera player;
+	static FPSCamera player;
 	int dx, dy;
 	static boolean g = true;
-	static boolean xz, m, xy;
+	static boolean xz, m, xy, xs, ld, ls, lx, lz, zx, zy, ee, rm, em, zz;
 	static float walkspeed;
-	static Object3D cube;
-	static Object3D corner;
+	static Object3D cursor;
+	static Vector3f cursorpos;
 	public static Ship ship;
+	public static boolean run = true;
+	public static WindowLoadModel wlm = new WindowLoadModel();; 
+	private static int idx = 0;
+	private static boolean za;
+	//WindowLoadModel wlm = new WindowLoadModel();
+	//wlm.create("Load Model", 300, 200);
+	public static void dump()
+	{
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json = gson.toJson(ship);
+		try
+		{
+			File dir = new File("ships");
+			if(!dir.exists())
+			{
+				dir.mkdirs();
+			}
+			BufferedWriter bw = new BufferedWriter(new FileWriter("ships" + OSDetect.sep() + ship.Name.toLowerCase().replace(" ", "") + ".json"));
+			bw.write(json);
+			bw.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		System.out.println("Ship saved");
+	}
+	public static Ship load(String name)
+	{
+		Ship s = new Ship();
+		try
+		{
+			Gson gson = new Gson();
+			File dir = new File("ships");
+			if(!dir.exists())
+			{
+				dir.mkdirs();
+			}
+			BufferedReader br = new BufferedReader(new FileReader("ships" + OSDetect.sep() + name.toLowerCase().replace(" ", "") + ".json"));
+			s = gson.fromJson(br, Ship.class);
+			s.init();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		return s;
+	}
 	private static String getTime(String fmt)
 	{
 		Date dNow = new Date( );
@@ -137,8 +186,12 @@ public class Main
 			Display.setDisplayMode(new DisplayMode(800, 600));
 			Display.setTitle(ConfigParser.getStr("Title") + "v" + ConfigParser.getStr("Version"));
 			//Display.setFullscreen(false);
+			Display.setIcon(IconLoader.load("files" + OSDetect.sep() + "resources" + OSDetect.sep() + "Icon.png"));
 			Display.create();
-			Mouse.setGrabbed(true);
+			BufferedReader br = new BufferedReader(new FileReader("files" + OSDetect.sep() + "resources" + OSDetect.sep() + "cube.obj"));
+			cursor = new Object3D(br, true);
+			cursorpos = new Vector3f(0, 2, 0);
+			Mouse.setGrabbed(false);
 			Display.setVSyncEnabled(true);
 			dx = Mouse.getDX();
 			dy = Mouse.getDY();
@@ -150,43 +203,58 @@ public class Main
 	}
 	public void initGL()
 	{
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		player = new FPSCamera(0, -8, 0);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(65.f, 800.0f / 600.0f, 0.01f, 500.0f);
 		glMatrixMode(GL_MODELVIEW);
-		glClearColor(0.5f, 0.5f, 1.0f, 0f);
-		//glLoadIdentity();
-		player = new FPSCamera(0, -8, 0);
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-	private void cube(float x, float y, float z, float xrot, float yrot, float zrot, float r, float g, float b, int id)
+	private static void cube(float x, float y, float z, float xrot, float yrot, float zrot, float r, float g, float b, int id)
 	{
 		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, ship.textures.get(id).id);
+		glBindTexture(GL_TEXTURE_2D, ship.getTexture(id).id);
 		glColor4f(r, g, b, 1f);
+		glScalef(1, 1, 1);
 		glTranslatef(x, y, z);
 		glRotatef(xrot, 1.f, 0.f, 0.f);
 		glRotatef(yrot, 0.f, 1.f, 0.f);
 		glRotatef(zrot, 0.f, 0.f, 1.f);
-		ship.objects.get(id).opengldraw();
+		ship.getObject(id).opengldraw();
 		glPopMatrix();
 	}
-	public void display()
+	
+	private static void cursor()
 	{
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glColor4f(1, 0, 0, 0.1f);
+		glTranslatef(cursorpos.x, cursorpos.y, cursorpos.z);
+		glScalef(1.1f, 1.1f, 1.1f);
+		cursor.opengldraw();
+		glPopMatrix();
+	}
+	
+	public static void display()
+	{
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		for(int x = 0; x < ship.voxels.size(); x++)
-		{
-			float[] temp = ship.voxels.get(x);
-			cube(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], (int)temp[9]);
-		}
 		glLoadIdentity();
         player.lookThrough();
+        
+        for(int x = 0; x < ship.Voxels.size(); x++)
+		{
+			float[] temp = ship.Voxels.get(x);
+			cube(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7], temp[8], (int)temp[9]);
+		}
+		
+		cursor();
 	}
-	public void checkInput()
+	public static void checkInput()
 	{
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && Mouse.isGrabbed())
 		{
@@ -250,15 +318,142 @@ public class Main
 		{
 			xy = true;
 		}
+		
 		if(Mouse.isGrabbed())
 		{
 			player.pitch(-(Mouse.getDY() * 0.1f));
 			player.yaw((Mouse.getDX() * 0.1f));
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && xs && Mouse.isGrabbed())
+		{
+			dump();
+			xs = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_S) && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && !xs && Mouse.isGrabbed())
+		{
+			xs = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && ld && Mouse.isGrabbed())
+		{
+			cursorpos.x += 2;
+			ld = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && !ld && Mouse.isGrabbed())
+		{
+			ld = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT) && ls && Mouse.isGrabbed())
+		{
+			cursorpos.x -= 2;
+			ls = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !ls && Mouse.isGrabbed())
+		{
+			ls = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP) && lx && Mouse.isGrabbed())
+		{
+			cursorpos.z -= 2;
+			lx = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_UP) && !lx && Mouse.isGrabbed())
+		{
+			lx = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN) && lz && Mouse.isGrabbed())
+		{
+			cursorpos.z += 2;
+			lz = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_DOWN) && !lz && Mouse.isGrabbed())
+		{
+			lz = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_Z) && zx && Mouse.isGrabbed())
+		{
+			cursorpos.y -= 2;
+			zx = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_Z) && !zx && Mouse.isGrabbed())
+		{
+			zx = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_X) && zy && Mouse.isGrabbed())
+		{
+			cursorpos.y += 2;
+			zy = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_X) && !zy && Mouse.isGrabbed())
+		{
+			zy = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN) && ee && Mouse.isGrabbed())
+		{
+			ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			ee = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_RETURN) && !ee && Mouse.isGrabbed())
+		{
+			ee = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_MINUS) && rm && Mouse.isGrabbed())
+		{
+			ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+			rm = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_MINUS) && !rm && Mouse.isGrabbed())
+		{
+			rm = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_E) && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && em && Mouse.isGrabbed())
+		{
+			Mouse.setGrabbed(false);
+			run = false;
+			wlm.create();
+			em = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_E) && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && !em && Mouse.isGrabbed())
+		{
+			em = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_P) && zz && Mouse.isGrabbed())
+		{
+			if(idx == (ship.getSize() - 1))
+			{
+				idx = 0;
+			}
+			else
+			{
+				idx++;
+			}
+			zz = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_P) && !zz && Mouse.isGrabbed())
+		{
+			zz = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_L) && za && Mouse.isGrabbed())
+		{
+			if(idx == 0)
+			{
+				idx = (ship.getSize() - 1);
+			}
+			else
+			{
+				idx--;
+			}
+			za = false;
+		}
+		if(!Keyboard.isKeyDown(Keyboard.KEY_L) && !za && Mouse.isGrabbed())
+		{
+			za = true;
+		}
+		// ld, ls, lx, lz, zx, zy
 	}
-	public void run()
+	public static void run()
 	{
-		while (true)
+		//wlm.hide();
+		while (run)
 		{
 			display();
 			checkInput();
@@ -266,15 +461,16 @@ public class Main
 			Display.update();
 		}
 	}
-	public void shutdown()
+	public static void shutdown()
 	{
 		Display.destroy();
 		System.out.println("Engine exiting");
 		System.exit(0);
 	}
 	public static void main(String[] args) throws Exception
-	{	
+	{
 		UI.init();
 		UI.open();
+		run = true;
 	}
 }

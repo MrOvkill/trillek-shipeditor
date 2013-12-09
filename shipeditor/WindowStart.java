@@ -1,3 +1,10 @@
+// * * * * * * * * * * * * * * * * * * * * * * \\
+// Author: Overkill                            \\
+// Product: Trillek Ship Editor                \\
+// License: GPL v3                             \\
+// Date of Creation: December 6, 2013          \\
+// * * * * * * * * * * * * * * * * * * * * * * \\
+
 package shipeditor;
 
 import java.awt.Font;
@@ -13,6 +20,8 @@ public class WindowStart
 	private JTextArea field;
 	private JButton exit;
 	private JButton create;
+	private JButton load;
+	private JButton update;
 	public void create(String name, int x, int y)
 	{
 		frame = new JFrame();
@@ -39,7 +48,33 @@ public class WindowStart
 			{
 				hide();
 				WindowCreate wc = new WindowCreate();
-				wc.create("Create Ship", 300, 200);
+				wc.create("Create Ship", 300, 100);
+			}
+		});
+		load = new JButton("Load");
+		load.setFont(new Font("Arial", 12, 12));
+		load.setText("Load");
+		load.setBounds(213, 70, 80, 30);
+		load.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				hide();
+				WindowLoad wl = new WindowLoad();
+				wl.create("Load Ship", 300, 100);
+			}
+		});
+		update = new JButton("Update");
+		update.setFont(new Font("Arial", 12, 12));
+		update.setText("Update");
+		update.setBounds(213, 100, 80, 30);
+		update.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				hide();
+				Updater.fetchUpdate();
+				System.exit(0);
 			}
 		});
 		field.setText("Welcome to the Ship Editor!\nClick new to create a new ship\nClick quit to exit");
@@ -48,6 +83,8 @@ public class WindowStart
 		panel.add(field);
 		panel.add(exit);
 		panel.add(create);
+		panel.add(load);
+		//panel.add(update);
 		panel.setLayout(null);
 		frame.setResizable(false);
 		frame.setTitle(name);

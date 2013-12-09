@@ -1,3 +1,10 @@
+// * * * * * * * * * * * * * * * * * * * * * * \\
+// Author: Overkill                            \\
+// Product: Trillek Ship Editor                \\
+// License: GPL v3                             \\
+// Date of Creation: December 6, 2013          \\
+// * * * * * * * * * * * * * * * * * * * * * * \\
+
 package shipeditor;
 
 import java.awt.Font;
@@ -44,19 +51,13 @@ public class WindowCreate
 				nfield.setText(nfield.getText().replace("\\", "-").replace("/", "-"));
 				nfield2.setText(nfield2.getText().replace("\\", "-").replace("/", "-"));
 				hide();
-				Main.ship = new Ship(nfield.getText(), nfield2.getText());
-				Main.ship.models.add("cube.obj");
-				Main.ship.images.add("grey.png");
-				Main.ship.models.add("half.obj");
-				Main.ship.images.add("grey.png");
-				Main.ship.models.add("cube.obj");
-				Main.ship.images.add("cyan.png");
-				Main.ship.models.add("half.obj");
-				Main.ship.images.add("cyan.png");
-				Main.ship.voxels.add(new float[] {0, 0, 0, 0, 0, 0, 0.6f, 0.6f, 0.6f, 0});
+				Ship s = new Ship(nfield.getText(), nfield2.getText());
+				s.addModel("cube.obj");
+				s.addTexture("grey.png");
+				s.Voxels.add(new float[] {0, 0, 0, 0, 0, 0, 0.6f, 0.6f, 0.6f, 0});
+				Main.ship = s;
 				Main game = new Main();
 				game.start();
-				Main.ship.init();
 				game.initGL();
 				game.run();
 			}

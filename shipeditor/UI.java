@@ -1,3 +1,10 @@
+// * * * * * * * * * * * * * * * * * * * * * * \\
+// Author: Overkill                            \\
+// Product: Trillek Ship Editor                \\
+// License: GPL v3                             \\
+// Date of Creation: December 6, 2013          \\
+// * * * * * * * * * * * * * * * * * * * * * * \\
+
 package shipeditor;
 
 public class UI
