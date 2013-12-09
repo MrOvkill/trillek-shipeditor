@@ -59,7 +59,8 @@ public class WindowCreate
 				Main game = new Main();
 				game.start();
 				game.initGL();
-				game.run();
+				Main.ship.init();
+				Main.run();
 			}
 		});
 		panel.setLayout(null);
