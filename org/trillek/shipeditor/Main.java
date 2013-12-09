@@ -389,6 +389,7 @@ public class Main
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_RETURN) && ee && Mouse.isGrabbed())
 		{
+			ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
 			ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
 			ee = false;
 		}
