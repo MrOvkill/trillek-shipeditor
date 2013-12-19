@@ -26,7 +26,7 @@ public class WindowLoad
 		nfield2.setBounds(10, 10, 200, 25);
 		load = new JButton("Load");
 		load.setFont(new Font("Arial", 12, 12));
-		load.setText("Create");
+		load.setText("Load");
 		load.setBounds(213, 10, 80, 30);
 		load.addActionListener(new ActionListener() {
 			@Override
@@ -55,7 +55,7 @@ public class WindowLoad
 		frame.setTitle(name);
 		frame.setSize(x, y);
 		frame.getContentPane().add(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	public void hide()

@@ -36,6 +36,7 @@ public class Main
 	int dx, dy;
 	static boolean g = true;
 	static boolean xz, m, xy, xs, ld, ls, lx, lz, zx, zy, ee, rm, em, zz;
+	static long aa, ab, bb, bc, cc, cd, dd, de;
 	static float walkspeed;
 	static Object3D cursor;
 	static Vector3f cursorpos;
@@ -336,6 +337,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && ld && Mouse.isGrabbed())
 		{
 			cursorpos.x += 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			ld = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_RIGHT) && !ld && Mouse.isGrabbed())
@@ -345,6 +351,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT) && ls && Mouse.isGrabbed())
 		{
 			cursorpos.x -= 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			ls = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !ls && Mouse.isGrabbed())
@@ -354,6 +365,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP) && lx && Mouse.isGrabbed())
 		{
 			cursorpos.z -= 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			lx = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_UP) && !lx && Mouse.isGrabbed())
@@ -363,6 +379,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN) && lz && Mouse.isGrabbed())
 		{
 			cursorpos.z += 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			lz = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_DOWN) && !lz && Mouse.isGrabbed())
@@ -372,6 +393,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_Z) && zx && Mouse.isGrabbed())
 		{
 			cursorpos.y -= 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			zx = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_Z) && !zx && Mouse.isGrabbed())
@@ -381,6 +407,11 @@ public class Main
 		if(Keyboard.isKeyDown(Keyboard.KEY_X) && zy && Mouse.isGrabbed())
 		{
 			cursorpos.y += 2;
+			if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+				ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+			}
 			zy = false;
 		}
 		if(!Keyboard.isKeyDown(Keyboard.KEY_X) && !zy && Mouse.isGrabbed())
@@ -433,7 +464,7 @@ public class Main
 		{
 			zz = true;
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_L) && za && Mouse.isGrabbed())
+		if(Keyboard.isKeyDown(Keyboard.KEY_M) && za && Mouse.isGrabbed())
 		{
 			if(idx == 0)
 			{
@@ -448,6 +479,62 @@ public class Main
 		if(!Keyboard.isKeyDown(Keyboard.KEY_L) && !za && Mouse.isGrabbed())
 		{
 			za = true;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_I) && Mouse.isGrabbed())
+		{
+			if((ab - aa) >= 100)
+			{
+				aa = ab;
+				cursorpos.z -= 2;
+				if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+				{
+					ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+					ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+				}
+			}
+			ab = System.currentTimeMillis();
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_K) && Mouse.isGrabbed())
+		{
+			if((bc - bb) >= 100)
+			{
+				bb = bc;
+				cursorpos.z += 2;
+				if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+				{
+					ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+					ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+				}
+			}
+			bc = System.currentTimeMillis();
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_J) && Mouse.isGrabbed())
+		{
+			if((cd - cc) >= 100)
+			{
+				cc = cd;
+				cursorpos.x -= 2;
+				if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+				{
+					ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+					ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+				}
+			}
+			cd = System.currentTimeMillis();
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_L) && Mouse.isGrabbed())
+		{
+			if((de - dd) >= 100)
+			{
+				dd = de;
+				cursorpos.x += 2;
+				if(Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+				{
+					ship.deleteCube(cursorpos.x, cursorpos.y, cursorpos.z);
+					ship.addCube(cursorpos.x, cursorpos.y, cursorpos.z, 0, 0, 0, 0.6f, 0.6f, 0.6f, idx);
+				}
+			}
+			de = System.currentTimeMillis();
 		}
 		// ld, ls, lx, lz, zx, zy
 	}
@@ -470,6 +557,10 @@ public class Main
 	}
 	public static void main(String[] args) throws Exception
 	{
+		aa = System.currentTimeMillis();
+		bb = System.currentTimeMillis();
+		cc = System.currentTimeMillis();
+		dd = System.currentTimeMillis();
 		UI.init();
 		UI.open();
 		run = true;

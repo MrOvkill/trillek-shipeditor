@@ -71,7 +71,7 @@ public class WindowCreate
 		frame.setTitle(name);
 		frame.setSize(x, y);
 		frame.getContentPane().add(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	public void hide()

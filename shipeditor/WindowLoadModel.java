@@ -85,7 +85,7 @@ public class WindowLoadModel
 		frame.setTitle("Menu");
 		frame.setSize(300, 200);
 		frame.getContentPane().add(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
 	}
 }
